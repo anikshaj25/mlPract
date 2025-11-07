@@ -1,0 +1,45 @@
+# AIM: Program to demonstrate Decision Tree ID3 Algorithm
+
+# Import libraries
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.preprocessing import LabelEncoder
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Sample Dataset: [Outlook, Temperature, Humidity, Wind]
+# Labels: 0 = No, 1 = Yes (Play Tennis or Not)
+X = [
+    ['Sunny', 'Hot', 'High', 'Weak'],
+    ['Sunny', 'Hot', 'High', 'Strong'],
+    ['Overcast', 'Hot', 'High', 'Weak'],
+    ['Rain', 'Mild', 'High', 'Weak'],
+    ['Rain', 'Cool', 'Normal', 'Weak'],
+    ['Rain', 'Cool', 'Normal', 'Strong'],
+    ['Overcast', 'Cool', 'Normal', 'Strong'],
+    ['Sunny', 'Mild', 'High', 'Weak'],
+    ['Sunny', 'Cool', 'Normal', 'Weak'],
+    ['Rain', 'Mild', 'Normal', 'Weak'],
+    ['Sunny', 'Mild', 'Normal', 'Strong'],
+    ['Overcast', 'Mild', 'High', 'Strong'],
+    ['Overcast', 'Hot', 'Normal', 'Weak'],
+    ['Rain', 'Mild', 'High', 'Strong']
+]
+
+y = [0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0]  # Target
+
+# Convert categorical features to numerical
+df = pd.DataFrame(X, columns=['Outlook', 'Temperature', 'Humidity', 'Wind'])
+le = LabelEncoder()
+
+for col in df.columns:
+    df[col] = le.fit_transform(df[col])
+
+# Create Decision Tree model using ID3 (Entropy)
+model = DecisionTreeClassifier(criterion="entropy")
+model.fit(df, y)
+
+# Visualize the tree
+plt.figure(figsize=(12, 8))
+plot_tree(model, feature_names=df.columns, class_names=['No', 'Yes'], filled=True)
+plt.title("Decision Tree using ID3 (Entropy)")
+plt.show()
