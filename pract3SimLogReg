@@ -1,0 +1,40 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
+
+
+# Sample data: Hours studied vs Pass (1) / Fail (0) 
+X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9]).reshape(-1, 1)
+y = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1]) # 0 = Fail, 1 = Pass
+
+
+# Create Logistic Regression model 
+model = LogisticRegression()
+
+# Train the model 
+model.fit(X, y)
+
+# Predict for a new value 
+hours = 6.5
+prediction = model.predict([[hours]]) 
+probability = model.predict_proba([[hours]])
+
+print(f"Prediction for {hours} hours studied: {'Pass' if prediction[0] == 1 else 'Fail'}") 
+print(f"Probability of passing: {probability[0][1]:.2f}")
+
+# Plotting the results
+x_vals = np.linspace(0, 10, 100).reshape(-1, 1)
+
+ 
+y_probs = model.predict_proba(x_vals)[:, 1]
+
+
+plt.scatter(X, y, color='blue', label='Actual Data') 
+plt.plot(x_vals, y_probs, color='red', label='Logistic Curve')
+plt.axhline(0.5, color='green', linestyle='--', label='Decision Boundary (0.5)') 
+plt.xlabel('Hours Studied')
+plt.ylabel('Probability of Passing') 
+plt.title('Simple Logistic Regression Example') 
+plt.legend()
+plt.grid(True) 
+plt.show() 
